@@ -1,5 +1,6 @@
 import { selectUsuarios, selectUsuario, insertUsuario, deleteUsuario, updateUsuario } from "../db/index.js";  
 import { Router } from "express";
+import verificarAutenticacao from "../middlewares/autenticacao.js";
 const router = Router();
 
 router.get("/usuarios", async (req, res) => {
@@ -25,7 +26,7 @@ router.get("/usuarios", async (req, res) => {
   });
   
   
-  router.post("/usuario", async (req, res) => {
+  router.post("/usuario", verificarAutenticacao,async (req, res) => {
     console.log("Rota POST /usuario solicitada");
     try {
       await insertUsuario(req.body);
@@ -35,7 +36,7 @@ router.get("/usuarios", async (req, res) => {
     }
   });
   
-  router.delete("/usuario/:id", async (req, res) => {
+  router.delete("/usuario/:id", verificarAutenticacao, async (req, res) => {
     console.log("Rota DELETE /usuario solicitada");
     try {
       const usuario = await selectUsuario(req.params.id);
@@ -48,7 +49,7 @@ router.get("/usuarios", async (req, res) => {
     }
   });
   
-  router.put("/usuario", async (req, res) => {
+  router.put("/usuario", verificarAutenticacao, async (req, res) => {
     console.log("Rota PUT /usuario solicitada");
     try {
       const usuario = await selectUsuario(req.body.id);
